@@ -14,7 +14,7 @@ import java.util.Arrays;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan("com.percyvega.revenueassurance.rest2jms")
-@PropertySource({"application.properties", "sensitive.properties"})
+@PropertySource(value = {"application.properties", "sensitive.properties"}, ignoreResourceNotFound = true)
 public class Application {
 
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
