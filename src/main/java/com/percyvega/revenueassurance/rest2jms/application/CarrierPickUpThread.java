@@ -7,6 +7,8 @@ import com.percyvega.revenueassurance.rest2jms.model.Status;
 import com.percyvega.revenueassurance.rest2jms.util.Sleeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -16,6 +18,7 @@ import javax.jms.JMSException;
 /**
  * Created by pevega on 2/25/2015.
  */
+@Component
 public class CarrierPickUpThread extends Thread {
 
     private static final Logger logger = LoggerFactory.getLogger(CarrierPickUpThread.class);
@@ -28,6 +31,17 @@ public class CarrierPickUpThread extends Thread {
     private final int SLEEP_WHEN_UNAVAILABLE_SOURCE = 5000;
     private final int SLEEP_WHEN_UNAVAILABLE_DESTINATION = 5000;
     private final int SLEEP_WHEN_NO_RECORDS_FOUND = 3000;
+
+    private static String restUrl;
+    @Value("${restUrl}")
+    public void setRestUrl(String restUrl) {
+        this.restUrl = restUrl;
+    }
+
+    public CarrierPickUpThread() {
+        super("do-not-use");
+        this.CARRIER = null;
+    }
 
     public CarrierPickUpThread(Carrier carrier) {
         super(carrier.getName());
@@ -96,8 +110,8 @@ public class CarrierPickUpThread extends Thread {
 
     }
 
-    private static String getUrl(Status oldStatus, Status newStatus, Carrier carrier, int count) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://localhost:8181/intergateTransaction/findAndUpdate");
+    private String getUrl(Status oldStatus, Status newStatus, Carrier carrier, int count) {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(restUrl);
         builder.queryParam("oldStatus", oldStatus.getName());
         builder.queryParam("newStatus", newStatus.getName());
         builder.queryParam("carrier", carrier.getName());
