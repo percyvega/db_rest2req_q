@@ -1,4 +1,4 @@
-package com.percyvega.revenueassurance.rest2jms.util;
+package com.percyvega.rest2jms.util;
 
 /**
  * Created by pevega on 2/25/2015.

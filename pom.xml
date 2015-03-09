@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.percyvega.revenueassurance</groupId>
-    <artifactId>ra_rest2jms</artifactId>
+    <groupId>com.percyvega</groupId>
+    <artifactId>rest2jms</artifactId>
     <version>1.0-SNAPSHOT</version>
     <!--<packaging>jar</packaging>-->
 
@@ -44,7 +44,7 @@
     </dependencies>
 
     <properties>
-        <start-class>com.percyvega.revenueassurance.rest2jms.application.Application</start-class>
+        <start-class>com.percyvega.rest2jms.application.Application</start-class>
         <!-- use UTF-8 for everything -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

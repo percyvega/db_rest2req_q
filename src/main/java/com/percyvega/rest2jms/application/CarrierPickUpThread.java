@@ -1,10 +1,10 @@
-package com.percyvega.revenueassurance.rest2jms.application;
+package com.percyvega.rest2jms.application;
 
-import com.percyvega.revenueassurance.rest2jms.jms.JMSSender;
-import com.percyvega.revenueassurance.rest2jms.model.Carrier;
-import com.percyvega.revenueassurance.rest2jms.model.IntergateTransaction;
-import com.percyvega.revenueassurance.rest2jms.model.Status;
-import com.percyvega.revenueassurance.rest2jms.util.Sleeper;
+import com.percyvega.rest2jms.jms.JMSSender;
+import com.percyvega.rest2jms.model.Status;
+import com.percyvega.rest2jms.util.Sleeper;
+import com.percyvega.rest2jms.model.Carrier;
+import com.percyvega.rest2jms.model.IntergateTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,11 +26,11 @@ public class CarrierPickUpThread extends Thread {
     private final Carrier CARRIER;
     private final Status OLD_STATUS = Status.QUEUED;
     private final Status NEW_STATUS = Status.PICKED_UP;
-    private final int RECORDS_TO_PICK_UP_COUNT = 3;
-    private final int SLEEP_AFTER_PROCESSING = 5000;
-    private final int SLEEP_WHEN_UNAVAILABLE_SOURCE = 5000;
-    private final int SLEEP_WHEN_UNAVAILABLE_DESTINATION = 5000;
-    private final int SLEEP_WHEN_NO_RECORDS_FOUND = 3000;
+    public static final int RECORDS_TO_PICK_UP_COUNT = 2;
+    public static final int SLEEP_AFTER_PROCESSING = 5000;
+    public static final int SLEEP_WHEN_UNAVAILABLE_SOURCE = 5000;
+    public static final int SLEEP_WHEN_UNAVAILABLE_DESTINATION = 5000;
+    public static final int SLEEP_WHEN_NO_RECORDS_FOUND = 3000;
 
     private static String restUrl;
     @Value("${restUrl}")

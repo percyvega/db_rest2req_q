@@ -1,6 +1,7 @@
-package com.percyvega.revenueassurance.rest2jms.application;
+package com.percyvega.rest2jms.application;
 
-import com.percyvega.revenueassurance.rest2jms.model.Carrier;
+import com.percyvega.rest2jms.model.Carrier;
+import com.percyvega.rest2jms.util.Sleeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -13,7 +14,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan("com.percyvega.revenueassurance.rest2jms")
+@ComponentScan("com.percyvega.rest2jms")
 @PropertySource(value = {"application.properties", "sensitive.properties"}, ignoreResourceNotFound = true)
 public class Application {
 
@@ -26,6 +27,7 @@ public class Application {
 
         for (Carrier carrier : Carrier.values()) {
             new CarrierPickUpThread(carrier).start();
+            Sleeper.sleep(CarrierPickUpThread.SLEEP_AFTER_PROCESSING / Carrier.values().length);
         }
     }
 }
