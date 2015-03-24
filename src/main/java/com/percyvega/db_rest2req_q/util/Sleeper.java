@@ -1,4 +1,4 @@
-package com.percyvega.rest2jms.util;
+package com.percyvega.db_rest2req_q.util;
 
 /**
  * Created by pevega on 2/25/2015.

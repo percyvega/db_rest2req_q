@@ -1,4 +1,4 @@
-package com.percyvega.rest2jms.jms;
+package com.percyvega.db_rest2req_q.jms;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

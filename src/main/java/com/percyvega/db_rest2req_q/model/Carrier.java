@@ -1,19 +1,20 @@
-package com.percyvega.rest2jms.model;
+package com.percyvega.db_rest2req_q.model;
 
 import java.util.Arrays;
 
 /**
  * Created by pevega on 2/20/2015.
  */
-public enum Status {
-    QUEUED("QUEUED"),
-    PICKED_UP("PICKED_UP"),
-    PROCESSING("PROCESSING"),
-    PROCESSED("PROCESSED");
+public enum Carrier {
+    ATT("ATT")/*,
+    SPR("SPR"),
+    TMO("TMO"),
+    SMO("SMO"),
+    VZW("VZW")*/;
 
     private String name;
 
-    Status(String name) {
+    Carrier(String name) {
         this.name = name;
     }
 
@@ -25,8 +26,8 @@ public enum Status {
         this.name = name;
     }
 
-    public static Status getByName(String name) {
-        for (Status status : Arrays.asList(Status.values())) {
+    public static Carrier getByName(String name) {
+        for (Carrier status : Arrays.asList(Carrier.values())) {
             if (status.getName().equalsIgnoreCase(name))
                 return status;
         }

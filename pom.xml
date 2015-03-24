@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.percyvega</groupId>
-    <artifactId>rest2jms</artifactId>
+    <artifactId>db_rest2req_q</artifactId>
     <version>1.0-SNAPSHOT</version>
     <!--<packaging>jar</packaging>-->
 
@@ -44,7 +44,7 @@
     </dependencies>
 
     <properties>
-        <start-class>com.percyvega.rest2jms.application.Application</start-class>
+        <start-class>com.percyvega.db_rest2req_q.application.Application</start-class>
         <!-- use UTF-8 for everything -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

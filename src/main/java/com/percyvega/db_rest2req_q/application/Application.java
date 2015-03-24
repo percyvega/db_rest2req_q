@@ -1,7 +1,7 @@
-package com.percyvega.rest2jms.application;
+package com.percyvega.db_rest2req_q.application;
 
-import com.percyvega.rest2jms.model.Carrier;
-import com.percyvega.rest2jms.util.Sleeper;
+import com.percyvega.db_rest2req_q.model.Carrier;
+import com.percyvega.db_rest2req_q.util.Sleeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan("com.percyvega.rest2jms")
+@ComponentScan("com.percyvega.db_rest2req_q")
 @PropertySource(value = {"application.properties", "sensitive.properties"}, ignoreResourceNotFound = true)
 public class Application {
 

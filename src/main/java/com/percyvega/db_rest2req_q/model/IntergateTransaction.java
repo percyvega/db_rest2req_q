@@ -1,4 +1,4 @@
-package com.percyvega.rest2jms.model;
+package com.percyvega.db_rest2req_q.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
