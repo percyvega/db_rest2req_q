@@ -28,11 +28,12 @@ public class IntergateTransaction {
     public IntergateTransaction() {
     }
 
-    public IntergateTransaction(String mdn) {
+    public IntergateTransaction(String mdn, Carrier carrier) {
         this.mdn = mdn;
         this.orderType = "I";
         this.tryCount = 0L;
         this.status = Status.QUEUED;
+        this.carrierName = carrier.getName();
         this.creationDate = new Date(System.currentTimeMillis());
         setUpdateDate();
     }
