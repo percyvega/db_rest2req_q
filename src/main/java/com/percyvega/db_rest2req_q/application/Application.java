@@ -1,7 +1,7 @@
 package com.percyvega.db_rest2req_q.application;
 
 import com.percyvega.db_rest2req_q.model.Carrier;
-import com.percyvega.db_rest2req_q.util.Sleeper;
+import com.percyvega.util.Sleeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;

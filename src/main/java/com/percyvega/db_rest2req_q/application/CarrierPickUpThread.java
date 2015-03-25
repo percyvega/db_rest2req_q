@@ -2,7 +2,7 @@ package com.percyvega.db_rest2req_q.application;
 
 import com.percyvega.db_rest2req_q.jms.JMSSender;
 import com.percyvega.db_rest2req_q.model.Status;
-import com.percyvega.db_rest2req_q.util.Sleeper;
+import com.percyvega.util.Sleeper;
 import com.percyvega.db_rest2req_q.model.Carrier;
 import com.percyvega.db_rest2req_q.model.IntergateTransaction;
 import org.slf4j.Logger;

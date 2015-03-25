@@ -1,6 +1,7 @@
 package com.percyvega.db_rest2req_q.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.percyvega.util.JacksonUtil;
 
 import java.util.Date;
 
@@ -119,10 +120,7 @@ public class IntergateTransaction {
 
     @Override
     public String toString() {
-        return "ReconRecord [objid=" + objid + ", carrierName=" + carrierName + ", mdn=" + mdn +
-                ", creationDate=" + creationDate + ", updateDate=" + updateDate +
-                ", status=" + status + ", orderType=" + orderType +
-                ", tryCount=" + tryCount + ", response=" + response + "]";
+        return JacksonUtil.toJson(this);
     }
 
 }
