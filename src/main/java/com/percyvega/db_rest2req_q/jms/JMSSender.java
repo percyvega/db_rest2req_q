@@ -23,7 +23,7 @@ public class JMSSender {
     private QueueConnection queueConnection;
     private QueueSession queueSession;
     private Queue queue;
-    private QueueSender qsndr;
+    private QueueSender queueSender;
     private TextMessage textMessage;
 
     private static String qcfName;
@@ -63,30 +63,13 @@ public class JMSSender {
             Hashtable properties = new Hashtable();
             properties.put(Context.INITIAL_CONTEXT_FACTORY, icfName);
             properties.put(Context.PROVIDER_URL, providerUrl);
-//            properties.put(Context.SECURITY_PRINCIPAL, "username");                   // username
-//            properties.put(Context.SECURITY_CREDENTIALS, "password");                 // password
-
             initialContext = new InitialContext(properties);
-//            logger.debug("Got InitialContext " + initialContext.toString());
-
             queueConnectionFactory = (QueueConnectionFactory) initialContext.lookup(qcfName);
-//            logger.debug("Got QueueConnectionFactory " + queueConnectionFactory.toString());
-
             queueConnection = queueConnectionFactory.createQueueConnection();
-//            logger.debug("Got QueueConnection " + queueConnection.toString());
-
             queueSession = queueConnection.createQueueSession(false, 0);
-//            logger.debug("Got QueueSession " + queueSession.toString());
-
             queue = (Queue) initialContext.lookup(queueName);
-//            logger.debug("Got Queue " + queue.toString());
-
-            qsndr = queueSession.createSender(queue);
-//            logger.debug("Got QueueSender " + qsndr.toString());
-
+            queueSender = queueSession.createSender(queue);
             textMessage = queueSession.createTextMessage();
-//            logger.debug("Got TextMessage " + textMessage.toString());
-
         } catch (Exception e) {
             e.printStackTrace(System.err);
             logger.warn(e.toString());
@@ -99,14 +82,14 @@ public class JMSSender {
 
         textMessage.setText(messageText);
 
-        qsndr.send(textMessage);
+        queueSender.send(textMessage);
     }
 
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
 
-        qsndr.close();
+        queueSender.close();
         queueSession.close();
         queueConnection.close();
     }
