@@ -86,7 +86,7 @@ public class CarrierPickUpThread extends Thread {
                         destinationUnavailableCount = 0;
                         do {
                             try {
-                                jmsSender.sendMessage(txs[i].toString());
+                                jmsSender.sendMessage(Long.toString(txs[i].getObjid()), txs[i].toString());
                                 isDestinationUnavailable = false;
                             } catch (JMSException e) {
                                 logger.debug("Destination unavailable #" + ++destinationUnavailableCount + ". About to sleep(" + SLEEP_WHEN_UNAVAILABLE_DESTINATION + ").");

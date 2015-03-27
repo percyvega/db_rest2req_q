@@ -24,7 +24,6 @@ public class JMSSender {
     private QueueSession queueSession;
     private Queue queue;
     private QueueSender queueSender;
-    private TextMessage textMessage;
 
     private static String qcfName;
     @Value("${jms.qcfName}")
@@ -69,17 +68,18 @@ public class JMSSender {
             queueSession = queueConnection.createQueueSession(false, 0);
             queue = (Queue) initialContext.lookup(queueName);
             queueSender = queueSession.createSender(queue);
-            textMessage = queueSession.createTextMessage();
         } catch (Exception e) {
             e.printStackTrace(System.err);
             logger.warn(e.toString());
         }
     }
 
-    public void sendMessage(String messageText) throws JMSException {
+    public void sendMessage(String correlationId, String messageText) throws JMSException {
         if(!initialized)
             init();
 
+        TextMessage textMessage = queueSession.createTextMessage();
+        textMessage.setJMSCorrelationID(correlationId);
         textMessage.setText(messageText);
 
         queueSender.send(textMessage);
@@ -96,7 +96,17 @@ public class JMSSender {
 
     public static void main(String args[]) throws JMSException {
         JMSSender jmsSender = new JMSSender();
-        for (int i = 1; i <= 10; i++)
-            jmsSender.sendMessage("This is my JMS message #" + i + "!");
+        jmsSender.setQcfName(args[0]);
+        jmsSender.setProviderUrl(args[1]);
+        jmsSender.setIcfName(args[2]);
+        jmsSender.setQueueName(args[3]);
+
+        String message;
+        for (int i = 1; i <= 3; i++) {
+            message = "This is my JMS message #" + i + "!";
+
+            logger.debug(message);
+            jmsSender.sendMessage(Integer.toString(i), message);
+        }
     }
 }
