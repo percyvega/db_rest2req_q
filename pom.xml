@@ -44,7 +44,7 @@
     </dependencies>
 
     <properties>
-        <start-class>com.percyvega.db_rest2req_q.application.Application</start-class>
+        <start-class>com.percyvega.application.Application</start-class>
         <!-- use UTF-8 for everything -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

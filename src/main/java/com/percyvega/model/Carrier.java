@@ -1,4 +1,4 @@
-package com.percyvega.db_rest2req_q.model;
+package com.percyvega.model;
 
 import java.util.Arrays;
 

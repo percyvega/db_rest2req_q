@@ -1,10 +1,11 @@
-package com.percyvega.db_rest2req_q.application;
+package com.percyvega.application;
 
-import com.percyvega.db_rest2req_q.jms.JMSSender;
-import com.percyvega.db_rest2req_q.model.Status;
+import com.percyvega.jms.JMSSender;
+import com.percyvega.model.Status;
+import com.percyvega.util.JacksonUtil;
 import com.percyvega.util.Sleeper;
-import com.percyvega.db_rest2req_q.model.Carrier;
-import com.percyvega.db_rest2req_q.model.IntergateTransaction;
+import com.percyvega.model.Carrier;
+import com.percyvega.model.IntergateTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -81,12 +82,12 @@ public class CarrierPickUpThread extends Thread {
                 if (txs.length > 0) {
                     for (int i = 0; i < txs.length; i++) {
                         logger.debug("Processing array, record " + (i + 1) + " of " + txs.length + ".");
-                        logger.debug(txs[i].toString());
+                        logger.debug(JacksonUtil.fromTransactionToJson(txs[i]));
 
                         destinationUnavailableCount = 0;
                         do {
                             try {
-                                jmsSender.sendMessage(Long.toString(txs[i].getObjid()), txs[i].toString());
+                                jmsSender.sendMessage(Long.toString(txs[i].getObjid()), JacksonUtil.fromTransactionToJson(txs[i]));
                                 isDestinationUnavailable = false;
                             } catch (JMSException e) {
                                 logger.debug("Destination unavailable #" + ++destinationUnavailableCount + ". About to sleep(" + SLEEP_WHEN_UNAVAILABLE_DESTINATION + ").");

@@ -1,4 +1,4 @@
-package com.percyvega.db_rest2req_q.jms;
+package com.percyvega.jms;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,7 +102,7 @@ public class JMSSender {
         jmsSender.setQueueName(args[3]);
 
         String message;
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= Integer.parseInt(args[4]); i++) {
             message = "This is my JMS message #" + i + "!";
 
             logger.debug(message);

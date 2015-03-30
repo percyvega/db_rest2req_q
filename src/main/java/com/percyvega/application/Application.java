@@ -1,6 +1,6 @@
-package com.percyvega.db_rest2req_q.application;
+package com.percyvega.application;
 
-import com.percyvega.db_rest2req_q.model.Carrier;
+import com.percyvega.model.Carrier;
 import com.percyvega.util.Sleeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan("com.percyvega.db_rest2req_q")
+@ComponentScan("com.percyvega")
 @PropertySource(value = {"application.properties", "sensitive.properties"}, ignoreResourceNotFound = true)
 public class Application {
 
