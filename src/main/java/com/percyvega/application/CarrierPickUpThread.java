@@ -1,15 +1,13 @@
 package com.percyvega.application;
 
 import com.percyvega.jms.JMSSender;
+import com.percyvega.model.Carrier;
+import com.percyvega.model.IntergateTransaction;
 import com.percyvega.model.Status;
 import com.percyvega.util.JacksonUtil;
 import com.percyvega.util.Sleeper;
-import com.percyvega.model.Carrier;
-import com.percyvega.model.IntergateTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -19,7 +17,6 @@ import javax.jms.JMSException;
 /**
  * Created by pevega on 2/25/2015.
  */
-@Component
 public class CarrierPickUpThread extends Thread {
 
     private static final Logger logger = LoggerFactory.getLogger(CarrierPickUpThread.class);
@@ -27,25 +24,32 @@ public class CarrierPickUpThread extends Thread {
     private final Carrier CARRIER;
     private final Status OLD_STATUS = Status.QUEUED;
     private final Status NEW_STATUS = Status.PICKED_UP;
-    public static final int RECORDS_TO_PICK_UP_COUNT = 7;
-    public static final int SLEEP_AFTER_PROCESSING = 10000;
-    public static final int SLEEP_WHEN_UNAVAILABLE_SOURCE = 15000;
-    public static final int SLEEP_WHEN_UNAVAILABLE_DESTINATION = 15000;
-    public static final int SLEEP_WHEN_NO_RECORDS_FOUND = 20000;
+    public static final int RECORDS_TO_PICK_UP_COUNT = 5;
+    public static final int SLEEP_AFTER_PROCESSING = 3000;
+    public static final int SLEEP_WHEN_UNAVAILABLE_SOURCE = 10000;
+    public static final int SLEEP_WHEN_UNAVAILABLE_DESTINATION = 10000;
+    public static final int SLEEP_WHEN_NO_RECORDS_FOUND = 5000;
 
-    private static String restUrl;
-    @Value("${restUrl}")
-    public void setRestUrl(String restUrl) {
-        this.restUrl = restUrl;
+    private static RestTemplate restTemplate = new RestTemplate();
+
+    private static JMSSender jmsSender;
+    public static void setJmsSender(JMSSender jmsSender) {
+        CarrierPickUpThread.jmsSender = jmsSender;
     }
 
-    public CarrierPickUpThread() {
-        super("do-not-use");
-        this.CARRIER = null;
+    private static String sourceUrl;
+    public static void setSourceUrl(String sourceUrl) {
+        CarrierPickUpThread.sourceUrl = sourceUrl;
     }
 
     public CarrierPickUpThread(Carrier carrier) {
         super(carrier.getName());
+
+        if(sourceUrl == null)
+            throw new RuntimeException("sourceUrl cannot be null.");
+        if(jmsSender == null)
+            throw new RuntimeException("jmsSender cannot be null.");
+
         this.CARRIER = carrier;
     }
 
@@ -53,8 +57,6 @@ public class CarrierPickUpThread extends Thread {
     public void run() {
         logger.debug("Starting run()");
 
-        JMSSender jmsSender = new JMSSender();
-        RestTemplate restTemplate = new RestTemplate();
         IntergateTransaction[] txs = null;
 
         boolean isSourceUnavailable;
@@ -62,15 +64,13 @@ public class CarrierPickUpThread extends Thread {
         boolean isDestinationUnavailable;
         int destinationUnavailableCount;
 
-        String url = getUrl(OLD_STATUS, NEW_STATUS, CARRIER, RECORDS_TO_PICK_UP_COUNT);
-
         try {
             while (true) {
 
                 sourceUnavailableCount = 0;
                 do {
                     try {
-                        txs = restTemplate.getForObject(url, IntergateTransaction[].class);
+                        txs = restTemplate.getForObject(getUrl(), IntergateTransaction[].class);
                         isSourceUnavailable = false;
                     } catch (ResourceAccessException e) {
                         logger.debug("Source unavailable #" + ++sourceUnavailableCount + ". About to sleep(" + SLEEP_WHEN_UNAVAILABLE_SOURCE + ").");
@@ -81,8 +81,7 @@ public class CarrierPickUpThread extends Thread {
 
                 if (txs.length > 0) {
                     for (int i = 0; i < txs.length; i++) {
-                        logger.debug("Processing array, record " + (i + 1) + " of " + txs.length + ".");
-                        logger.debug(JacksonUtil.fromTransactionToJson(txs[i]));
+                        logger.debug("Processing array, record " + (i + 1) + " of " + txs.length + ": " + JacksonUtil.fromTransactionToJson(txs[i]));
 
                         destinationUnavailableCount = 0;
                         do {
@@ -111,12 +110,12 @@ public class CarrierPickUpThread extends Thread {
 
     }
 
-    private String getUrl(Status oldStatus, Status newStatus, Carrier carrier, int count) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(restUrl);
-        builder.queryParam("oldStatus", oldStatus.getName());
-        builder.queryParam("newStatus", newStatus.getName());
-        builder.queryParam("carrier", carrier.getName());
-        builder.queryParam("count", count);
+    private String getUrl() {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(sourceUrl);
+        builder.queryParam("oldStatus", OLD_STATUS.getName());
+        builder.queryParam("newStatus", NEW_STATUS.getName());
+        builder.queryParam("carrier", CARRIER.getName());
+        builder.queryParam("count", Integer.toString(RECORDS_TO_PICK_UP_COUNT));
 
         return builder.build().toUriString();
     }
