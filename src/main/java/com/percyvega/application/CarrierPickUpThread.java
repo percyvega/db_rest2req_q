@@ -22,7 +22,7 @@ public class CarrierPickUpThread extends Thread {
     private static final Logger logger = LoggerFactory.getLogger(CarrierPickUpThread.class);
 
     private final Carrier CARRIER;
-    private final Status OLD_STATUS = Status.QUEUED;
+    private final Status OLD_STATUS = Status.NEW;
     private final Status NEW_STATUS = Status.PICKED_UP;
     public static final int RECORDS_TO_PICK_UP_COUNT = 5;
     public static final int SLEEP_AFTER_PROCESSING = 3000;
