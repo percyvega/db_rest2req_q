@@ -2,7 +2,7 @@ package com.percyvega.application;
 
 import com.percyvega.jms.JMSSender;
 import com.percyvega.model.Carrier;
-import com.percyvega.model.IntergateTransaction;
+import com.percyvega.model.CarrierInquiry;
 import com.percyvega.model.Status;
 import com.percyvega.util.JacksonUtil;
 import com.percyvega.util.Sleeper;
@@ -57,7 +57,7 @@ public class CarrierPickUpThread extends Thread {
     public void run() {
         logger.debug("Starting run()");
 
-        IntergateTransaction[] txs = null;
+        CarrierInquiry[] txs = null;
 
         boolean isSourceUnavailable;
         int sourceUnavailableCount;
@@ -70,7 +70,7 @@ public class CarrierPickUpThread extends Thread {
                 sourceUnavailableCount = 0;
                 do {
                     try {
-                        txs = restTemplate.getForObject(getUrl(), IntergateTransaction[].class);
+                        txs = restTemplate.getForObject(getUrl(), CarrierInquiry[].class);
                         isSourceUnavailable = false;
                     } catch (ResourceAccessException e) {
                         logger.debug("Source unavailable #" + ++sourceUnavailableCount + ". About to sleep(" + SLEEP_WHEN_UNAVAILABLE_SOURCE + ").");
@@ -81,12 +81,12 @@ public class CarrierPickUpThread extends Thread {
 
                 if (txs.length > 0) {
                     for (int i = 0; i < txs.length; i++) {
-                        logger.debug("Processing array, record " + (i + 1) + " of " + txs.length + ": " + JacksonUtil.fromTransactionToJson(txs[i]));
+                        logger.debug("Processing array, record " + (i + 1) + " of " + txs.length + ": " + JacksonUtil.toJson(txs[i]));
 
                         destinationUnavailableCount = 0;
                         do {
                             try {
-                                jmsSender.sendMessage(Long.toString(txs[i].getObjid()), JacksonUtil.fromTransactionToJson(txs[i]));
+                                jmsSender.sendMessage(Long.toString(txs[i].getObjid()), JacksonUtil.toJson(txs[i]));
                                 isDestinationUnavailable = false;
                             } catch (JMSException e) {
                                 logger.debug("Destination unavailable #" + ++destinationUnavailableCount + ". About to sleep(" + SLEEP_WHEN_UNAVAILABLE_DESTINATION + ").");
