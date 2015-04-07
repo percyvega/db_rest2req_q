@@ -1,7 +1,19 @@
 #!/bin/bash
 
+. setVars_dev.sh
+if [ -z "$APP_NAME" ]
+then
+    echo "$APP_NAME cannot be empty."
+    exit
+fi
+
 cd ..
 
 java \
--Ddb_rest2req_q \
--jar target/db_rest2req_q-1.0-SNAPSHOT.jar
+-D$APP_NAME \
+-jar target/$APP_NAME-1.0-SNAPSHOT.jar \
+    $sourceUrl \
+    $jms_qcfName \
+    $jms_providerUrl \
+    $jms_icfName \
+    $jms_destinationQueueName

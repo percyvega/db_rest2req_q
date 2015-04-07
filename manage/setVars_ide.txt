@@ -1,0 +1,5 @@
+--sourceUrl=http://localhost:8181/actions/findAndUpdate
+--jms.qcfName=jms/myConnectionFactory
+--jms.providerUrl=t3://localhost:8001
+--jms.icfName=weblogic.jndi.WLInitialContextFactory
+--jms.destinationQueueName=jms/percyvegaQueue
